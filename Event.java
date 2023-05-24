@@ -23,12 +23,12 @@ class Event implements Comparable<Event> {
         return totalWaitingTime;
     }
 
-    public ImList<Server> checkRest(ImList<Server> serverList) {
+    public ImList<Server> updateServerList(ImList<Server> serverList) {
         return serverList;
     }
 
-    public Pair<Event, ImList<Server>> nextEvent(ImList<Server> serverList) {
-        return new Pair<Event, ImList<Server>>(this, serverList);
+    public Event nextEvent(ImList<Server> serverList) {
+        return this;
     }
 
     public int compareTo(Event other) {

@@ -16,18 +16,18 @@ class QueueEvent extends Event {
         return true;
     }
 
-    public Pair<Event, ImList<Server>> nextEvent(ImList<Server> serverList) {
+    public Event nextEvent(ImList<Server> serverList) {
         int flag = serverList.get(serverIndex).checkAvailable(this.time);
         if (flag != -1) {
             double serviceTime = customer.getServiceTime();
-            return new Pair<Event, ImList<Server>>(new ServeEvent(this.time, serviceTime, 
-                this.customer, serverIndex, flag), serverList.set(serverIndex, 
-                serverList.get(serverIndex).updateAvailableTime(flag, this.time + serviceTime)));
+            String serverType = serverList.get(serverIndex).toString();
+            return new ServeEvent(this.time, serviceTime, this.customer, serverIndex, flag, 
+                    serverType);
         } else {
-            return new Pair<Event, ImList<Server>>(new QueueEvent(this.time + 
-                serverList.get(serverIndex).requiredWaitingTime(this.time), 
+            return new QueueEvent(this.time + 
                 serverList.get(serverIndex).requiredWaitingTime(this.time),
-                this.customer, serverIndex), serverList);
+                serverList.get(serverIndex).requiredWaitingTime(this.time), 
+                this.customer, serverIndex);
         }
     }
 
