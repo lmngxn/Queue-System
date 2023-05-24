@@ -28,8 +28,8 @@ class Simulator {
         PQ<Event> pq = new PQ<Event>(new EventComp());
         
         for (int i = 1; i <= numOfServers; i++) {
-            serverList = serverList.add(new Server(i, qmax, 0, 
-                    new ImList<Double>().add(0.0), restTimes));
+            serverList = serverList.add(new HumanServer(i, qmax, 0, 
+                    0.0, restTimes));
         }
         
         if (numOfSelfChecks > 0) {
@@ -38,7 +38,7 @@ class Simulator {
                 selfchecksAT = selfchecksAT.add(0.0);
             }
             serverList = serverList.add(new Selfchecks(numOfServers + 1, qmax, 0, 
-                    selfchecksAT, restTimes));
+                    selfchecksAT));
         }
 
         for (int i = 0; i < arrivalTimes.size(); i++) {
@@ -55,11 +55,9 @@ class Simulator {
             numServed = currentEvent.updateNumServed(numServed);
             numLeft = currentEvent.updateNumLeft(numLeft);
             totalWaitingTime = currentEvent.updateTotalWaitingTime(totalWaitingTime);
-            serverList = currentEvent.checkRest(serverList);
+            serverList = currentEvent.updateServerList(serverList);
             if (currentEvent.hasNextEvent()) {
-                Pair<Event, ImList<Server>> temp = currentEvent.nextEvent(serverList);
-                pq = pq.add(temp.first());
-                serverList = temp.second();
+                pq = pq.add(currentEvent.nextEvent(serverList));
             }
         }
         if (numServed != 0) {

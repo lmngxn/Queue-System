@@ -1,41 +1,35 @@
-import java.util.function.Supplier;
-
 class Selfchecks extends Server {
-    Selfchecks(int id, int qmax, int queue, ImList<Double> availableTimes, 
-            Supplier<Double> restTimes) {
-        super(id, qmax, queue, availableTimes, restTimes);
+    private final ImList<Double> availableTimes;
+
+    Selfchecks(int id, int qmax, int queue, ImList<Double> availableTimes) {
+        super(id, qmax, queue);
+        this.availableTimes = availableTimes;
     }
     
     public int checkAvailable(double arrivalTime) {
         for (int i = 0; i < availableTimes.size(); i++) {
             if (availableTimes.get(i) <= arrivalTime) {
-                return i + 1;
+                return i;
             }
         }
         return -1;
     }
 
-    public Server checkRest() {
-        return this;
-    }
-
     public Server enqueue() {
-        return new Selfchecks(this.id, this.qmax, this.queue + 1, this.availableTimes, 
-                this.restTimes);
+        return new Selfchecks(this.id, this.qmax, this.queue + 1, this.availableTimes);
     }
 
     public Server dequeue() {
         if (queue == 0) {
             return this;
         } else {
-            return new Selfchecks(this.id, this.qmax, this.queue - 1, this.availableTimes, 
-                    this.restTimes);
+            return new Selfchecks(this.id, this.qmax, this.queue - 1, this.availableTimes);
         }
     }
 
     public Server updateAvailableTime(int index, double newAvailableTime) {
-        return new Selfchecks(this.id, this.qmax, this.queue, this.availableTimes.set(index - 1, 
-                newAvailableTime), this.restTimes);
+        return new Selfchecks(this.id, this.qmax, this.queue, this.availableTimes.set(index,
+                newAvailableTime));
     }
 
     public double requiredWaitingTime(double currentTime) {
@@ -46,5 +40,9 @@ class Selfchecks extends Server {
             }
         }
         return earliestAvailableTime - currentTime;
+    }
+
+    public String toString() {
+        return String.format("self-check ");
     }
 }

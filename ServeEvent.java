@@ -1,12 +1,15 @@
 class ServeEvent extends Event {
     private final int serverIndex;
     private final int subIndex;
+    private final String serverType;
     private final double serviceTime;
 
-    ServeEvent(double time, double serviceTime, Customer customer, int serverIndex, int subIndex) {
+    ServeEvent(double time, double serviceTime, Customer customer, int serverIndex, int subIndex,
+            String serverType) {
         super(time, customer);
         this.serverIndex = serverIndex;
         this.subIndex = subIndex;
+        this.serverType = serverType;
         this.serviceTime = serviceTime;
     }
 
@@ -18,18 +21,18 @@ class ServeEvent extends Event {
         return true;
     }
 
-    public Pair<Event, ImList<Server>> nextEvent(ImList<Server> serverList) {
-        return new Pair<Event, ImList<Server>>(new DoneEvent(this.time + this.serviceTime,
-                this.customer, this.serverIndex, this.subIndex), serverList.set(this.serverIndex, 
-                serverList.get(serverIndex).dequeue()));
+    public Event nextEvent(ImList<Server> serverList) {
+        return new DoneEvent(this.time + this.serviceTime, this.customer, this.serverIndex, 
+                    this.subIndex, this.serverType);
+    }
+
+    public ImList<Server> updateServerList(ImList<Server> serverList) {
+        return serverList.set(serverIndex, serverList.get(serverIndex).dequeue()
+                    .updateAvailableTime(subIndex, this.time + this.serviceTime));
     }
     
     public String toString() {
-        if (subIndex == 0) {
-            return super.toString() + "serves by " + (this.serverIndex + 1) + "\n";
-        } else {
-            return super.toString() + "serves by self-check " + (this.serverIndex +
-                    this.subIndex) + "\n";
-        }
+        return super.toString() + "serves by " + serverType + (this.serverIndex + this.subIndex +
+                1) + "\n";
     }
 }
