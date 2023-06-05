@@ -12,7 +12,8 @@ class ArriveEvent extends Event {
             int flag = serverList.get(i).checkAvailable(this.time);
             if (flag != -1) {
                 double serviceTime = customer.getServiceTime();
-                return new ServeEvent(this.time, serviceTime, this.customer, flag, serverList.get(i));
+                return new ServeEvent(this.time, serviceTime, this.customer, flag, 
+                        serverList.get(i));
             }
         }
         for (int i = 0; i < serverList.size(); i++) {

@@ -51,6 +51,6 @@ class HumanServer extends Server {
     }
 
     public String toString(int subId) {
-        return String.format("%d ", this.id);
+        return String.format("%d", this.id);
     }
 }

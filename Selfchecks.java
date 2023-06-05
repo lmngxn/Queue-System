@@ -43,6 +43,6 @@ class Selfchecks extends Server {
     }
 
     public String toString(int subId) {
-        return String.format("self-check %d ", this.id + subId);
+        return String.format("self-check %d", this.id + subId);
     }
 }
