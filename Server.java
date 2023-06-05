@@ -44,4 +44,12 @@ class Server {
     public double requiredWaitingTime(double currentTime) {
         return 0;
     }
+
+    public int getIndex() {
+        return id - 1;
+    }
+
+    public String toString(int subId) {
+        return "";
+    }
 }

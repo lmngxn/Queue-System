@@ -42,7 +42,7 @@ class Selfchecks extends Server {
         return earliestAvailableTime - currentTime;
     }
 
-    public String toString() {
-        return String.format("self-check ");
+    public String toString(int subId) {
+        return String.format("self-check %d ", this.id + subId);
     }
 }

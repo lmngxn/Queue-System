@@ -1,14 +1,11 @@
 class WaitEvent extends Event {
-    private final int serverIndex;
-    private final String serverType;
+    private final Server server;
     private final double waitingTime;
 
-    WaitEvent(double time, double waitingTime, Customer customer, int serverIndex, 
-            String serverType) {
+    WaitEvent(double time, double waitingTime, Customer customer, Server server) {
         super(time, customer);
         this.waitingTime = waitingTime;
-        this.serverIndex = serverIndex;
-        this.serverType = serverType;
+        this.server = server;
     }
 
     public double updateTotalWaitingTime(double totalWaitingTime) {
@@ -21,14 +18,14 @@ class WaitEvent extends Event {
 
     public Event nextEvent(ImList<Server> serverList) {
         return new QueueEvent(this.time + this.waitingTime, 0.0,
-                this.customer, this.serverIndex);
+                this.customer, this.server);
     }
 
     public ImList<Server> updateServerList(ImList<Server> serverList) {
-        return serverList.set(serverIndex, serverList.get(serverIndex).enqueue());
+        return serverList.set(server.getIndex(), serverList.get(server.getIndex()).enqueue());
     }
 
     public String toString() {
-        return super.toString() + "waits at " + serverType + (serverIndex + 1) + "\n";
+        return super.toString() + "waits at " + server.toString(0) + "\n";
     }
 }

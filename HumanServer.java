@@ -50,7 +50,7 @@ class HumanServer extends Server {
         return this.availableTime - currentTime;
     }
 
-    public String toString() {
-        return "";
+    public String toString(int subId) {
+        return String.format("%d ", this.id);
     }
 }

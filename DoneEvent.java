@@ -1,24 +1,18 @@
 class DoneEvent extends Event {
-    private final int serverIndex;
+    private final Server server;
     private final int subIndex;
-    private final String serverType;
 
-    DoneEvent(double time, Customer customer, int serverIndex, int subIndex, String serverType) {
+    DoneEvent(double time, Customer customer, int subIndex, Server server) {
         super(time, customer);
-        this.serverIndex = serverIndex;
+        this.server = server;
         this.subIndex = subIndex;
-        this.serverType = serverType;
     }
 
     public ImList<Server> updateServerList(ImList<Server> serverList) {
-        if (serverType == "") {
-            return serverList.set(serverIndex, serverList.get(serverIndex).checkRest());
-        }
-        return serverList;
+        return serverList.set(server.getIndex(), serverList.get(server.getIndex()).checkRest());
     }
 
     public String toString() {
-        return super.toString() + "done serving by " + serverType + (this.serverIndex + 
-                this.subIndex + 1) + "\n";
+        return super.toString() + "done serving by " + server.toString(subIndex) + "\n";
     }
 }
